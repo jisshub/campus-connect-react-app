@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch , useSelector} from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { Table } from 'react-bootstrap';
 import { addUniversity, editUniversity } from '../../redux/slices/universitySlice';
+
 interface Props {
     editData?: {
         name: string;
@@ -14,7 +15,7 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
     const [name, setName] = useState(editData?.name || "");
     const [website, setWebsite] = useState(editData?.website || "");
     const [country, setCountry] = useState(editData?.country || "");
-    // useSelector hook to get the universities from the store
+
     const universities = useSelector((state: any) => state.universities.data);
     const dispatch = useDispatch();
 
@@ -29,7 +30,6 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
     };
 
     useEffect(() => {
-        // log uniersities to the console
         console.log("Universities:", universities);
     }, [universities]);
 
@@ -39,9 +39,29 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            {/* Input fields and validation logic */}
-        </form>
+        <div>  {/* Parent div */}
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>University Name</th>
+                        <th>Country Name</th>
+                        <th>Website Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {universities.map((uni: any) => (
+                        <tr key={uni.name}>
+                            <td>{uni.name}</td>
+                            <td>{uni.country}</td>
+                            <td><a href={uni.web_pages[0]} target="_blank" rel="noopener noreferrer">{uni.web_pages[0]}</a></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+            <form onSubmit={handleSubmit}>
+                {/* Input fields and validation logic */}
+            </form>
+        </div>
     );
 }
 
