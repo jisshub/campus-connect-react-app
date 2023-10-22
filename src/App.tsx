@@ -13,7 +13,7 @@ function App() {
         axios.get('http://universities.hipolabs.com/search?country=United+States')
             .then(response => {
               // only fetch 20 universities
-                response.data = response.data.slice(0, 20);
+                response.data = response.data.slice(0, 10);
                 dispatch(setUniversities(response.data));
             });
     }, [dispatch]);
