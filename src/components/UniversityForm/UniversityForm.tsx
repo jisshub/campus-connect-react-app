@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Table, FormControl } from "react-bootstrap";
+import { Table, FormControl, Pagination } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import {
   addUniversity,
@@ -24,15 +24,21 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
     name: '',
     website: '',
     country: ''
-});
-
-
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  
+  
   const universities = useSelector((state: any) => state.universities.data);
   const dispatch = useDispatch();
-
+  
   const filteredUniversities = universities.filter((uni: any) =>
   uni.name.toLowerCase().includes(filterText.toLowerCase())
   );
+  const currentItems = filteredUniversities.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredUniversities.length / itemsPerPage);
 
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -118,7 +124,7 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredUniversities.map((uni: any) => (
+          {currentItems.map((uni: any) => (
             <tr key={uni.name}>
               <td>{uni.name}</td>
               <td>{uni.country}</td>
@@ -139,6 +145,26 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
           ))}
         </tbody>
       </Table>
+      <Pagination>
+        <Pagination.Prev 
+          disabled={currentPage === 1} 
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+        />
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <Pagination.Item 
+            key={index + 1} 
+            active={index + 1 === currentPage} 
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next 
+          disabled={currentPage === totalPages} 
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+        />
+      </Pagination>
+
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
             <label htmlFor="name" className="form-label">University Name</label>
