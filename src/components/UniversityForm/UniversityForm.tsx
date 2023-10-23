@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, FormControl, Pagination } from "react-bootstrap";
+import { FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
 import { Form } from "react-bootstrap";
 import {
   addUniversity,
@@ -19,6 +20,8 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
   const [name, setName] = useState(editData?.name || "");
   const [website, setWebsite] = useState(editData?.website || "");
   const [country, setCountry] = useState(editData?.country || "");
+  const [sortField, setSortField] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [filterText, setFilterText] = useState("");
   const [errors, setErrors] = useState({
     name: '',
@@ -34,15 +37,27 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
   const universities = useSelector((state: any) => state.universities.data);
   const dispatch = useDispatch();
   
-  const filteredUniversities = universities.filter((uni: any) =>
-  uni.name.toLowerCase().includes(filterText.toLowerCase())
+  const sortedUniversities = [...universities].sort((a: any, b: any) => {
+    if (sortField === 'name') {
+      if (sortOrder === 'asc') {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    }
+    return 0; 
+  });
+  
+  const filteredUniversities = sortedUniversities.filter((uni: any) =>
+    uni.name.toLowerCase().includes(filterText.toLowerCase())
   );
+  
   const currentItems = filteredUniversities.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredUniversities.length / itemsPerPage);
 
 
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault(); // Prevent page reload
+    event.preventDefault();
     if (validate()) {
         setErrors({
             name: '',
@@ -59,6 +74,21 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
       }
     }
   };
+
+  const getSortIcon = (field: any) => {
+    if (sortField !== field) return <FaSort />;
+    return sortOrder === 'asc' ? <FaSortUp /> : <FaSortDown />;
+  };
+
+    // handleSort function
+  const handleSort = (field: any) => {
+    if (sortField === field) {
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+        setSortField(field);
+        setSortOrder('asc');
+    }
+  }
 
   const validate = (): boolean => {
     let isValid = true;
@@ -90,8 +120,7 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
 
     setErrors(newErrors);
     return isValid;
-};
-
+  };
 
   useEffect(() => {
     console.log("Universities:", universities);
@@ -118,7 +147,12 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>University Name</th>
+            <th
+              style={{ cursor: 'pointer' }}
+              onClick={() => handleSort('name')}>
+                University Name
+                {getSortIcon('name')}
+              </th>
             <th>Country Name</th>
             <th>Website Address</th>
           </tr>
