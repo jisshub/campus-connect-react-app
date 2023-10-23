@@ -33,7 +33,6 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   
-  
   const universities = useSelector((state: any) => state.universities.data);
   const dispatch = useDispatch();
   
@@ -55,7 +54,6 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
   const currentItems = filteredUniversities.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredUniversities.length / itemsPerPage);
 
-
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (validate()) {
@@ -65,15 +63,16 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
             country: ''
           });          
       if (editData) {
-        dispatch(editUniversity({ name, website, country }));
+        dispatch(editUniversity({ name, website: website === "N/A" ? "" : website, country }));
       } else {
-        dispatch(addUniversity({ name, website, country }));
+        dispatch(addUniversity({ name, website: website === "N/A" ? "" : website, country }));
         setName("");
         setWebsite("");
         setCountry("");
       }
     }
   };
+
 
   const getSortIcon = (field: any) => {
     if (sortField !== field) return <FaSort />;
@@ -121,16 +120,6 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
     return isValid;
   };
 
-  useEffect(() => {
-    console.log("Universities:", universities);
-  }, [universities]);
-
-  useEffect(() => {
-    if (editData) {
-      validate();
-    }
-  }, []);
-  
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       {" "}
@@ -156,24 +145,32 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((uni: any) => (
-            <tr key={uni.name}>
-              <td>{uni.name}</td>
-              <td>{uni.country}</td>
-              <td>
+        {currentItems.map((uni: any) => (
+          <tr key={uni.name}>
+            <td>{uni.name}</td>
+            <td>{uni.country}</td>
+            <td>
                 {uni.web_pages && uni.web_pages.length > 0 ? (
-                  <a
-                    href={uni.web_pages[0]}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {uni.web_pages[0]}
-                  </a>
+                    <a
+                        href={uni.web_pages[0]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        {uni.web_pages[0]}
+                    </a>
+                ) : uni.website ? (
+                    <a
+                        href={uni.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        {uni.website}
+                    </a>
                 ) : (
-                  "N/A"
+                    "N/A"
                 )}
-              </td>
-            </tr>
+            </td>
+          </tr>
           ))}
         </tbody>
       </Table>
