@@ -68,7 +68,7 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
         dispatch(editUniversity({ name, website, country }));
       } else {
         dispatch(addUniversity({ name, website, country }));
-        setName(""); // Clear the fields after dispatching
+        setName("");
         setWebsite("");
         setCountry("");
       }
@@ -80,7 +80,6 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
     return sortOrder === 'asc' ? <FaSortUp /> : <FaSortDown />;
   };
 
-    // handleSort function
   const handleSort = (field: any) => {
     if (sortField === field) {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -135,7 +134,6 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       {" "}
-      {/* Parent div */}
       <div style={{ marginBottom: '20px', marginTop: '20px' }}>
         <FormControl
           type="text"

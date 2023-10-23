@@ -5,7 +5,6 @@ import { setUniversities } from './redux/slices/universitySlice';
 import UniversityForm from './components/UniversityForm/UniversityForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 function App() {
     const dispatch = useDispatch();
      const [bgColor, setBgColor] = useState<string>('');
