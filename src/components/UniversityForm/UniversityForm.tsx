@@ -19,6 +19,7 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
   const [name, setName] = useState(editData?.name || "");
   const [website, setWebsite] = useState(editData?.website || "");
   const [country, setCountry] = useState(editData?.country || "");
+  const [filterText, setFilterText] = useState("");
   const [errors, setErrors] = useState({
     name: '',
     website: '',
@@ -28,6 +29,11 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
 
   const universities = useSelector((state: any) => state.universities.data);
   const dispatch = useDispatch();
+
+  const filteredUniversities = universities.filter((uni: any) =>
+  uni.name.toLowerCase().includes(filterText.toLowerCase())
+  );
+
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault(); // Prevent page reload
@@ -92,9 +98,17 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
   }, []);
   
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       {" "}
       {/* Parent div */}
+      <div style={{ marginBottom: '20px', marginTop: '20px' }}>
+        <FormControl
+          type="text"
+          placeholder="Filter by University Name"
+          onChange={(e) => setFilterText(e.target.value)}
+          style={{ width: '300px', marginBottom: '20px' }}
+        />
+      </div>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -104,7 +118,7 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
           </tr>
         </thead>
         <tbody>
-          {universities.map((uni: any) => (
+          {filteredUniversities.map((uni: any) => (
             <tr key={uni.name}>
               <td>{uni.name}</td>
               <td>{uni.country}</td>
@@ -118,7 +132,7 @@ const UniversityForm: React.FC<Props> = ({ editData }) => {
                     {uni.web_pages[0]}
                   </a>
                 ) : (
-                  "N/A" // Placeholder text when web_pages is not available
+                  "N/A"
                 )}
               </td>
             </tr>
