@@ -29,6 +29,7 @@
 - React Hooks
 - React Bootstrap
 - Redux
+- React Icons
 
 ## Functionality
 
