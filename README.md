@@ -5,6 +5,7 @@
 - [Installation](#installation)
 - [Tools and Technologies](#tools-and-technologies)
 - [Functionality](#functionality)
+- [Visit the app](#visit-the-app)
 
 ## Installation
 
@@ -40,3 +41,7 @@
 - Filter data by university name
 - Add new university
 - Display recently created university in the table.
+
+## Visit the app
+
+- [Campus Connect](https://jisshub.github.io/campus-connect-react-app/)
