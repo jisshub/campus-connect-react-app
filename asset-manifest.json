@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/campus-connect-react-app/static/css/main.6ccd65a8.css",
+    "main.js": "/campus-connect-react-app/static/js/main.54e49cfc.js",
+    "index.html": "/campus-connect-react-app/index.html",
+    "main.6ccd65a8.css.map": "/campus-connect-react-app/static/css/main.6ccd65a8.css.map",
+    "main.54e49cfc.js.map": "/campus-connect-react-app/static/js/main.54e49cfc.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6ccd65a8.css",
+    "static/js/main.54e49cfc.js"
+  ]
+}
